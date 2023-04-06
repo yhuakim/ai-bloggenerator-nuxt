@@ -28,115 +28,127 @@ This will create a new Next.js project in a directory called `my-app`. Once the 
 cd my-app
 ```
 
-## Step 2: Run the development server
+## Step 2: Add some pages
 
-To start the development server, run the following command:
+Next.js uses a file-based routing system, which means that each page of your application is represented by a file in the `pages` directory. Let's create a few pages to get started.
 
-```
-npm run dev
-```
-
-This will start the server at `http://localhost:3000`. You should see a welcome page with the Next.js logo.
-
-## Step 3: Create a new page
-
-Next.js uses a file-based routing system, which means that each page is represented by a file in the `pages` directory. To create a new page, create a new file in the `pages` directory with the `.js` extension.
-
-For example, to create a new page called `about`, create a file called `about.js` in the `pages` directory with the following content:
+Create a new file called `index.js` in the `pages` directory and add the following code:
 
 ```jsx
-function About() {
-  return <h1>About Page</h1>;
+function HomePage() {
+  return <h1>Welcome to my app!</h1>;
 }
 
-export default About;
+export default HomePage;
 ```
 
-Now if you navigate to `http://localhost:3000/about`, you should see the "About Page" heading.
+This will create a simple homepage for your application. Now let's create a second page. Create a new file called `about.js` in the `pages` directory and add the following code:
 
-## Step 4: Add some styles
+```jsx
+function AboutPage() {
+  return <h1>About us</h1>;
+}
 
-Next.js supports CSS modules out of the box, which allows you to write scoped CSS for your components. To add some styles to our `about` page, create a new file called `about.module.css` in the same directory as the `about.js` file with the following content:
+export default AboutPage;
+```
+
+## Step 3: Add some styles
+
+Next.js comes with built-in support for CSS modules, which allows you to write modular CSS that is scoped to a specific component. Let's add some styles to our pages.
+
+Create a new file called `styles.module.css` in the `pages` directory and add the following code:
 
 ```css
 .heading {
-  color: blue;
+  font-size: 2rem;
+  color: #333;
 }
 ```
 
-Now update the `about.js` file to use the `heading` class:
+Now let's update our `index.js` and `about.js` files to use this stylesheet. Add the following code to the top of each file:
 
 ```jsx
-import styles from './about.module.css';
-
-function About() {
-  return <h1 className={styles.heading}>About Page</h1>;
-}
-
-export default About;
+import styles from './styles.module.css';
 ```
 
-Refresh the page and you should see the heading in blue.
-
-## Step 5: Fetch some data
-
-Next.js provides a built-in `getStaticProps` function that allows you to fetch data at build time. To demonstrate this, let's create a new page called `posts` that fetches some data from an API.
-
-Create a new file called `posts.js` in the `pages` directory with the following content:
+Then update the `return` statement in each file to include the `heading` class:
 
 ```jsx
-function Posts({ posts }) {
+function HomePage() {
+  return <h1 className={styles.heading}>Welcome to my app!</h1>;
+}
+
+function AboutPage() {
+  return <h1 className={styles.heading}>About us</h1>;
+}
+```
+
+## Step 4: Add some data
+
+Next.js allows you to fetch data at build time or request time, depending on your needs. Let's add some data to our application.
+
+Create a new file called `data.js` in the `pages` directory and add the following code:
+
+```js
+export const posts = [
+  {
+    id: 1,
+    title: 'Post 1',
+    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+  },
+  {
+    id: 2,
+    title: 'Post 2',
+    content: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+  },
+];
+```
+
+Now let's update our `index.js` file to display this data. Add the following code to the top of the file:
+
+```jsx
+import { posts } from './data';
+```
+
+Then update the `return` statement to display the posts:
+
+```jsx
+function HomePage() {
   return (
-    <ul>
-      {posts.map((post) => (
-        <li key={post.id}>{post.title}</li>
-      ))}
-    </ul>
+    <div>
+      <h1 className={styles.heading}>Welcome to my app!</h1>
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>
+            <h2>{post.title}</h2>
+            <p>{post.content}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
-
-export async function getStaticProps() {
-  const res = await fetch('https://jsonplaceholder.typicode.com/posts');
-  const posts = await res.json();
-
-  return {
-    props: {
-      posts,
-    },
-  };
-}
-
-export default Posts;
 ```
 
-This page fetches some data from the [JSONPlaceholder](https://jsonplaceholder.typicode.com/) API and renders a list of posts. The `getStaticProps` function is called at build time and the data is passed to the `Posts` component as a prop.
+## Step 5: Deploy your application
 
-Now if you navigate to `http://localhost:3000/posts`, you should see a list of posts.
+Now that we have built our Next.js application, it's time to deploy it. There are many ways to deploy a Next.js application, but one popular option is to use Vercel.
 
-## Step 6: Deploy your application
+To deploy your application to Vercel, follow these steps:
 
-To deploy your Next.js application, you can use a variety of hosting services such as Vercel, Netlify, or AWS. For this tutorial, we will use Vercel.
+1. Sign up for a free account at [vercel.com](https://vercel.com).
+2. Install the Vercel CLI by running `npm i -g vercel`.
+3. Run `vercel login` to log in to your Vercel account.
+4. Run `vercel` in your project directory to deploy your application.
 
-First, create an account on [Vercel](https://vercel.com/) and install the Vercel CLI by running the following command:
-
-```
-npm install -g vercel
-```
-
-Next, run the following command to deploy your application:
-
-```
-vercel
-```
-
-This will start the deployment process and give you a URL where your application is hosted.
+Once your application is deployed, you can access it at the URL provided by Vercel.
 
 ## Conclusion
 
-In this tutorial, we walked through the steps to build a Next.js application from scratch. We covered creating a new project, running the development server, creating a new page, adding styles, fetching data, and deploying the application. Next.js is a powerful framework that allows you to build SSR applications with ease, and we hope this tutorial has given you a good introduction to it.
+In this tutorial, we have learned how to build a Next.js application from scratch. We have covered the basics of creating pages, adding styles, and fetching data. We have also learned how to deploy our application to Vercel. With this knowledge, you should be able to build your own Next.js applications with ease.
 
-## Resources
+### Resources
 
-- [Next.js Documentation](https://nextjs.org/docs)
-- [React Documentation](https://reactjs.org/docs)
-- [CSS Modules Documentation](https://github.com/css-modules/css-modules)
+- [Next.js documentation](https://nextjs.org/docs)
+- [CSS Modules documentation](https://github.com/css-modules/css-modules)
+- [Vercel documentation](https://vercel.com/docs)

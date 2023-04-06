@@ -29,7 +29,7 @@ export default {
         topic: this.topic,
       });
       try {
-        const res = await fetch("/api/write", {
+        const res = await fetch("/write", {
           method: "POST",
           body,
         });
