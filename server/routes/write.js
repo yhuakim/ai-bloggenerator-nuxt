@@ -1,11 +1,13 @@
 import fs from 'fs';
-
 import { readBody } from 'h3'
-
 import { Configuration, OpenAIApi } from "openai";
 const configuration = new Configuration({
     apiKey: process.env.OPENAI_API_KEY,
 });
+
+export const config = {
+    runtime: "edge",
+};
 
 export default defineEventHandler(async (event) => {
     const openai = new OpenAIApi(configuration);
